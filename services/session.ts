@@ -22,7 +22,7 @@ export async function getNextSession(): Promise<Session>{
     "sorts": [
       {
         "property": "Data",
-        "direction": "ascending"
+        "direction": "descending"
       }
     ]
   }
