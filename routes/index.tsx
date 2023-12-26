@@ -1,43 +1,12 @@
 import SeeMore from "../islands/see-more.tsx";
+import { getNextSession } from "../services/session.ts";
+import formatDate from "../utils/formatDate.ts";
 
-interface Session {
-  place: string;
-  date: string;
-  time: string;
-  title: string;
-  gm: string;
-  description: string;
-  summary: string;
-}
-
-const NEXT_SESSIONS: Session[] = [
-  {
-    place: "Casa do MA",
-    date: "2024-01-07",
-    time: "08:00(?)",
-    title: "Curse of Strahd, sessão 4",
-    gm: "Fernando",
-    description: "A quarta sessão da incrível campanha de D&D 5e do Fernando, baseado em seu livro",
-    summary: `Os jogadores estão em Barovia, uma terra dominada por um vampiro chamado Strahd.
-    Eles estão buscando levar a filha do burgo-mestre de Barovia para um lugar seguro.
-    Na última sessão eles chegaram a uma cidadezinha chamada Vallaki, onde encontraram um grupo de vampiros e um possível aliado chamado. Uma nova aventureira passou a integrar o grupo.
-    `
-  }
-];
 
 const heroIMG = "/hero.jpg";
 
-export default function Home() {
-  // order the sessions by date
-  NEXT_SESSIONS
-    .filter(({date}) => new Date(date).getTime() > new Date().getTime())
-    .sort((a, b) => {
-      const aDate = new Date(a.date);
-      const bDate = new Date(b.date);
-      return aDate.getTime() - bDate.getTime();
-    });
-
-  const nextSession = NEXT_SESSIONS[0];
+export default async function Home() {
+  const nextSession = await getNextSession()
 
   return (
     <div class="w-screen h-screen overflow-hidden bg-no-repeat bg-cover" style={{ backgroundImage: `url(${heroIMG})` }}>
@@ -47,13 +16,13 @@ export default function Home() {
               <div class="text-3xl font-bold text-center text-white">PROXIMA SESSÃO</div>
               <div class="text-4xl font-bold text-center text-white">{nextSession.title}</div>
               <div class="text-2xl font-bold text-center text-white">Onde? {nextSession.place}</div>
-              <div class="text-2xl font-bold text-center text-white">Quando? {nextSession.date} {nextSession.time}</div>
+              <div class="text-2xl font-bold text-center text-white">Quando? {formatDate(nextSession.date)}</div>
               <div class="text-2xl font-bold text-center text-white">GM:{nextSession.gm}</div>
               <SeeMore>
-                Descrição:
+                <div class="text-l font-bold text-center text-white">Descrição:</div>
                 <div class="text-2xl font-bold text-center text-white">{nextSession.description}</div>
-                Sumario:
-                <div class="text-1xl font-bold text-center text-white">{nextSession.summary}</div>
+                <div class="text-l font-bold text-center text-white">Resumo:</div>
+                <div class="text-xl font-bold text-center text-white">{nextSession.summary}</div>
               </SeeMore>
 
             </div>
