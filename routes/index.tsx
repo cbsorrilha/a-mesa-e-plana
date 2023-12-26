@@ -12,20 +12,6 @@ interface Session {
 
 const NEXT_SESSIONS: Session[] = [
   {
-    place: "Online",
-    date: "2023-12-22",
-    time: "22:00",
-    title: "O Dragão e a Ira, sessão 2",
-    gm: "Cesar",
-    description: "A segunda sessão da two-shot(?) de D&D 5e do Cesar, baseado em seu livro vindouro",
-    summary: `
-    Ela se passará nos Forgotten Realms.
-Na primeira sessão, os jogadores estavam no casamento do príncipe filho do monarca da cidade de Telperis (criada por mim) quando, do céu, começou a chover sangue e um dragão atacou a catedral.
-O dragão assassinou o rei, capturou a princesa e enfeitiçou o príncipe que ficou catatônico.
-Concorrentemente um exército comandado pelo Dragão atacou a cidade e conseguiu expulsou o príncipe e um pequeno grupo de nobres e soldados. Assim como os jogadores, que acompanhavam o príncipe.
-    `
-  },
-  {
     place: "Casa do MA",
     date: "2024-01-07",
     time: "08:00(?)",
