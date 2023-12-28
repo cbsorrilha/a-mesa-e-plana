@@ -14,6 +14,7 @@ export default class Session {
 
   async getNextSession(): Promise<SessionResponse> {
     try {
+      //TODO: melhorar como passamos esses filtros pro Notion
       const filters = {
         "filter": {
           "property": "date",
@@ -32,14 +33,8 @@ export default class Session {
       const nextSession = (await this.sessionService.getSessions(filters))[0];
       
       const pageId = nextSession.id;
-    
-      const pageData = await getNotionPage(pageId)
-    
-      const pageContent = pageData.reduce((stack: string, block: any) => {
-        return stack + block.paragraph.rich_text[0].plain_text
-      }, '')
   
-      nextSession.summary = pageContent;
+      nextSession.summary = await this.sessionService.getNotionPageContentAsPlainText(pageId);
       
       return {session: nextSession, error: null};
     } catch (error) {

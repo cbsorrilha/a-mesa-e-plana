@@ -3,7 +3,7 @@ import Session from "../entities/session.ts";
 import formatDate from "../utils/formatDate.ts";
 import { NotionSessionService } from "../adapters/notion.ts";
 
-
+//TODO: pegar dinamicamente o bg de algum lugar legal com fotos de RPG
 const heroIMG = "/hero.jpg";
 
 export default async function Home() {
@@ -12,6 +12,7 @@ export default async function Home() {
   const { session, error } = await sessionService.getNextSession()
 
   if (error || !session) {
+    //TODO: pensar numa forma melhor de exibir o erro
     return <div>Erro ao buscar a próxima sessão</div>
   }
   
@@ -30,7 +31,7 @@ export default async function Home() {
               </div>
               <div class="font-bold text-center text-white">
                 <div class="text-l">Quando? </div>
-                <div class="text-2xl">{formatDate(session.date)}</div>
+                <div class="text-2xl">{formatDate(session.date, 'dd/MM/yyyy')}</div>
               </div>
               <div class="font-bold text-center text-white">
                 <div class="text-l">GM: </div>
@@ -39,9 +40,9 @@ export default async function Home() {
               </div>
               <SeeMore>
                 <div class="text-l font-bold text-center text-white">Descrição:</div>
-                <div class="text-xl font-bold text-center text-white text-justify">{session.description}</div>
+                <div class="text-xl font-bold text-white text-justify">{session.description}</div>
                 <div class="text-l font-bold text-center text-white">Resumo:</div>
-                <div class="text-xl font-bold text-center text-white overflow-y-scroll h-40 text-justify">{session.summary}</div>
+                <div class="text-xl font-bold text-white overflow-y-scroll h-40 text-justify">{session.summary}</div>
               </SeeMore>
 
             </div>

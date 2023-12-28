@@ -17,4 +17,5 @@ export interface Options {
 
 export interface SessionService {
   getSessions(filters: Options): Promise<SessionDTO[]>;
+  getNotionPageContentAsPlainText(pageId: string): Promise<string>;
 }

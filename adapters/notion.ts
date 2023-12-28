@@ -1,5 +1,7 @@
 import type {SessionDTO, SessionService, Options} from './interfaces/session-service.ts'
 
+//TODO: esse arquivo está uma BAGUNÇA, precisa ser refatorado
+
 export interface QueryResult<T> {
   id: string;
   properties: T;
@@ -11,7 +13,7 @@ export interface GetPageResult {
   }
 }
 
-export async function notionRequest(uri: string, payload?: Record<string, unknown>, method = 'GET') {
+async function notionRequest(uri: string, payload?: Record<string, unknown>, method = 'GET') {
   const rawResponse = await fetch(`https://api.notion.com/v1${uri}`, {
     method: method,
     headers: {
@@ -147,6 +149,14 @@ export class NotionSessionService implements SessionService{
         summary: "",
       }
     })
+  }
+
+  async getNotionPageContentAsPlainText(pageId: string): Promise<string> {
+    const pageData = await getNotionPage(pageId)
+    
+      return pageData.reduce((stack: string, block: any) => {
+        return stack + block.paragraph.rich_text[0].plain_text
+      }, '')
   }
 
 }
