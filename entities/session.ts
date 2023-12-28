@@ -1,5 +1,4 @@
 import formatDate from "../utils/formatDate.ts";
-import {getNotionPage} from "../adapters/notion.ts";
 import type {SessionDTO, SessionService} from '../adapters/interfaces/session-service.ts'
 
 type SessionResponse = {

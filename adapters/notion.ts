@@ -13,6 +13,16 @@ export interface GetPageResult {
   }
 }
 
+export interface NotionPerson {
+  name: string;
+}
+//TODO: melhorar essa tipagem
+export interface NotionBlock {
+  paragraph: {
+    rich_text: {plain_text: string}[];
+  }
+}
+
 async function notionRequest(uri: string, payload?: Record<string, unknown>, method = 'GET') {
   const rawResponse = await fetch(`https://api.notion.com/v1${uri}`, {
     method: method,
@@ -143,7 +153,7 @@ export class NotionSessionService implements SessionService{
         gm: nextSession.properties.GM.people[0].name,
         place: nextSession.properties.Lugar.rich_text[0].plain_text,
         title: nextSession.properties['Título'].title[0].plain_text,
-        attendees: nextSession.properties['Participantes'].people.reduce((stack, person: any) => stack + person.name, ''),
+        attendees: nextSession.properties['Participantes'].people.reduce((stack, person: NotionPerson) => stack + person.name, ''),
         date: nextSession.properties.Data.date.start,
         description: nextSession.properties['Descrição'].rich_text[0].plain_text,
         summary: "",
@@ -154,7 +164,7 @@ export class NotionSessionService implements SessionService{
   async getNotionPageContentAsPlainText(pageId: string): Promise<string> {
     const pageData = await getNotionPage(pageId)
     
-      return pageData.reduce((stack: string, block: any) => {
+      return pageData.reduce((stack: string, block: NotionBlock) => {
         return stack + block.paragraph.rich_text[0].plain_text
       }, '')
   }
