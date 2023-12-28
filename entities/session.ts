@@ -6,12 +6,17 @@ type SessionResponse = {
   error: string | null 
 }
 
+type SessionsResponse = {
+  sessions: SessionDTO[] | null,
+  error: string | null 
+}
+
 export default class Session {
   constructor(private sessionService: SessionService) {
     this.sessionService = sessionService;
   }
 
-  async getNextSession(): Promise<SessionResponse> {
+  async getNextSessions(): Promise<SessionsResponse> {
     try {
       //TODO: melhorar como passamos esses filtros pro Notion
       const filters = {
@@ -29,17 +34,25 @@ export default class Session {
         ]
       }
   
-      const nextSession = (await this.sessionService.getSessions(filters))[0];
+      const nextSession = (await this.sessionService.getSessions(filters));
       
-      const pageId = nextSession.id;
-  
-      nextSession.summary = await this.sessionService.getNotionPageContentAsPlainText(pageId);
-      
-      return {session: nextSession, error: null};
+      return {sessions: nextSession, error: null};
     } catch (error) {
       console.error(error)
-      return {session: null, error: error.message};
+      return {sessions: null, error: error.message};
+    }
+  }
+
+  async getNextSession(): Promise<SessionResponse> {
+    const {sessions, error} = await this.getNextSessions();
+    if (error || !sessions) {
+      return {session: null, error}
     }
     
+    const nextSession = sessions[0]
+
+    nextSession.summary = await this.sessionService.getNotionPageContentAsPlainText(nextSession.id)
+
+    return {session: nextSession, error}
   }
 }
